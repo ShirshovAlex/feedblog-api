@@ -33,8 +33,11 @@ public class Post {
     private List<Comment> comment;
 
     private boolean isChecked = false;
+
     private long countViews = 0;
-    private long likes = 0;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Like> likes;
 
     public Post(String title, String description, Category category, User user) {
         this.title = title;
@@ -50,4 +53,6 @@ public class Post {
         this.category = category;
         this.user = user;
     }
+
+
 }

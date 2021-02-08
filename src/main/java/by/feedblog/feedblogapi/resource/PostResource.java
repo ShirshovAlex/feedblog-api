@@ -61,7 +61,7 @@ public class PostResource {
         }
     }
 
-    @PostMapping(path = "/getPost/{title}")
+    @PostMapping(path = "/getPostByTitle/{title}")
     public ResponseEntity<Post> getById(@PathVariable String title) {
         Post byTitle = postService.getByTitle(title);
         if (byTitle == null) {
@@ -95,10 +95,10 @@ public class PostResource {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Post> getLikes(long id) {
-        postService.updateLikes(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping(path = "/getLike/{id}")
+    public ResponseEntity<Long> getLikes(@PathVariable long id) {
+        long likes = postService.getLikes(id);
+        return new ResponseEntity<>(likes ,HttpStatus.OK);
     }
 
     @PostMapping(path = "/saveComment")
@@ -112,6 +112,25 @@ public class PostResource {
         postService.saveTag(id,tag);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping(path = "/doLike")
+    public ResponseEntity<Post> doLike(long idPost){
+        postService.doLike(idPost);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/getCountViews/{id}")
+    public ResponseEntity<Long> getCountViews(@PathVariable long id){
+        long countViews = postService.getCountViews(id);
+        return new ResponseEntity<>(countViews, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/check/{id}")
+    public ResponseEntity<Post> check(@PathVariable long id){
+        postService.check(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
 
 }

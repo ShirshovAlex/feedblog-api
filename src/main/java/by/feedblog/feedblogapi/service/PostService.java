@@ -60,14 +60,22 @@ public class PostService {
 
     public Post getById(long id) {
         if (postRepository.existsById(id)) {
-            return postRepository.getOne(id);
+            Post one = postRepository.getOne(id);
+            long countViews = one.getCountViews();
+            one.setCountViews(++countViews);
+            postRepository.save(one);
+            return one;
         }
         return null;
     }
 
     public Post getByTitle(String title) {
         if (postRepository.existsByTitle(title)) {
-            return postRepository.findByTitle(title);
+            Post byTitle = postRepository.findByTitle(title);
+            long countViews = byTitle.getCountViews();
+            byTitle.setCountViews(++countViews);
+            postRepository.save(byTitle);
+            return byTitle;
         }
         return null;
     }
@@ -113,12 +121,6 @@ public class PostService {
 //        jdbcPostDao.getLikes(post);
     }
 
-    public void updateLikes(long id){
-        Post one = postRepository.getOne(id);
-        long likes = one.getLikes();
-        one.setLikes(++likes);
-        postRepository.save(one);
-    }
 
     public void setComment(long id, String comment, long userId){
         Post one = postRepository.getOne(id);
@@ -134,6 +136,31 @@ public class PostService {
         Post one = postRepository.getOne(id);
         List<Tag> tags = one.getTags();
         tags.add(new Tag(tag));
+        postRepository.save(one);
+    }
+
+    public void doLike(long idPost){
+        Post one = postRepository.getOne(idPost);
+        List<Like> likes = one.getLikes();
+        likes.add(new Like());
+        postRepository.save(one);
+    }
+
+    public long getLikes(long id){
+        Post one = postRepository.getOne(id);
+        List<Like> likes = one.getLikes();
+        return likes.size();
+    }
+
+    public long getCountViews(long id){
+        Post one = postRepository.getOne(id);
+        long countViews = one.getCountViews();
+        return countViews;
+    }
+
+    public void check(long id){
+        Post one = postRepository.getOne(id);
+        one.setChecked(true);
         postRepository.save(one);
     }
 }
