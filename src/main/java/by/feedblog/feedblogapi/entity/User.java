@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -18,8 +21,20 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @NotBlank
+    @NotEmpty
+    @Size(min = 3)
     private String name;
+
+    @NotBlank
+    @NotEmpty
+    @Size(min = 3)
     private String login;
+
+    @NotBlank
+    @NotEmpty
+    @Size(min = 3)
     private String password;
 
 

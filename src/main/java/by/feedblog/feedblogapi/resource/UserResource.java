@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,7 +18,7 @@ public class UserResource {
     private UserService userService;
 
     @PostMapping(path = "/save")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
+    public ResponseEntity<User> saveUser(@Valid @RequestBody User user) {
         if (userService.save(user)) {
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         } else {
