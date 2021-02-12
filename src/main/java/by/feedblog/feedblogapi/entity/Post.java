@@ -23,7 +23,7 @@ public class Post {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Tag> tags;
 
-    @OneToOne
+    @ManyToOne
     private Category category;
 
     @OneToOne

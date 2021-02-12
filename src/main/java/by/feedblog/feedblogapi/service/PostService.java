@@ -1,12 +1,16 @@
 package by.feedblog.feedblogapi.service;
 
+import by.feedblog.feedblogapi.dao.repository.CategoryRepository;
 import by.feedblog.feedblogapi.dao.repository.PostRepository;
+import by.feedblog.feedblogapi.dao.repository.TagRepository;
 import by.feedblog.feedblogapi.dao.repository.UserRepository;
 import by.feedblog.feedblogapi.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -18,6 +22,11 @@ public class PostService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     public boolean save(Post post) {
         if (postRepository.existsByTitle(post.getTitle())) {
@@ -139,10 +148,16 @@ public class PostService {
         postRepository.save(one);
     }
 
-    public void doLike(long idPost){
+    public void doLike(long idPost, long idUser){
         Post one = postRepository.getOne(idPost);
+        User one1 = userRepository.getOne(idUser);
         List<Like> likes = one.getLikes();
-        likes.add(new Like());
+        Like e = new Like();
+
+        e.setUser(one1);
+
+        likes.add(e);
+
         postRepository.save(one);
     }
 
@@ -162,5 +177,45 @@ public class PostService {
         Post one = postRepository.getOne(id);
         one.setChecked(true);
         postRepository.save(one);
+    }
+
+    public List<Like> getAllLikes(long id){
+        Post one = postRepository.getOne(id);
+        List<Like> likes = one.getLikes();
+        return likes;
+    }
+
+    public List<Post> getAllByCategory(long id){
+        Category one = categoryRepository.getOne(id);
+        List<Post> allByCategory = postRepository.findAllByCategory(one);
+        return allByCategory;
+    }
+
+    public List<Post> getAllByTag(long id){
+        Tag one = tagRepository.getOne(id);
+        List<Post> allByTags = postRepository.findAllByTags(one);
+        return allByTags;
+    }
+
+    public List<Post> getAllByOrderAsc(){
+        List<Post> all = postRepository.findAll();
+        all.sort(new Comparator<Post>() {
+            @Override
+            public int compare(Post o1, Post o2) {
+                return Integer.compare(o1.getLikes().size(), o2.getLikes().size());
+            }
+        });
+        return all;
+    }
+
+    public List<Post> getAllByOrderDesc(){
+        List<Post> all = postRepository.findAll();
+        all.sort(new Comparator<Post>() {
+            @Override
+            public int compare(Post o1, Post o2) {
+                return Integer.compare(o2.getLikes().size(), o1.getLikes().size());
+            }
+        });
+        return all;
     }
 }

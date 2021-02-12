@@ -1,6 +1,7 @@
 package by.feedblog.feedblogapi.resource;
 
 import by.feedblog.feedblogapi.entity.Category;
+import by.feedblog.feedblogapi.entity.Like;
 import by.feedblog.feedblogapi.entity.Post;
 import by.feedblog.feedblogapi.entity.User;
 import by.feedblog.feedblogapi.service.PostService;
@@ -114,8 +115,8 @@ public class PostResource {
     }
 
     @PostMapping(path = "/doLike")
-    public ResponseEntity<Post> doLike(long idPost){
-        postService.doLike(idPost);
+    public ResponseEntity<Post> doLike(long idPost, long idUser){
+        postService.doLike(idPost, idUser);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -131,6 +132,36 @@ public class PostResource {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping(path = "/getAllLikes/{id}")
+    public ResponseEntity<List<Like>> getAllLikes(@PathVariable long id){
+        List<Like> allLikes = postService.getAllLikes(id);
+        return new ResponseEntity<>(allLikes, HttpStatus.OK);
+    }
 
+    @PostMapping(path = "/getAllByCategory/{id}")
+    public ResponseEntity<List<Post>> getAllByCategory(@PathVariable long id){
+        List<Post> allByCategory = postService.getAllByCategory(id);
+        System.out.println(allByCategory);
+        return new ResponseEntity<>(allByCategory, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/findAllByTag/{id}")
+    public ResponseEntity<List<Post>> findAllByTag(@PathVariable long id){
+        List<Post> allByTag = postService.getAllByTag(id);
+        System.out.println(allByTag);
+        return new ResponseEntity<>(allByTag, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/sortByLikeAsc")
+    public ResponseEntity<List<Post>> sortByLikeAsc(){
+        List<Post> allByOrderAsc = postService.getAllByOrderAsc();
+        return new ResponseEntity<>(allByOrderAsc, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/sortByLikeDesc")
+    public ResponseEntity<List<Post>> sortByLikeDesc(){
+        List<Post> allByOrderDesc = postService.getAllByOrderDesc();
+        return new ResponseEntity<>(allByOrderDesc, HttpStatus.OK);
+    }
 
 }

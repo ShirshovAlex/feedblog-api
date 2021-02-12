@@ -23,9 +23,9 @@ public class LikeResource {
         return new ResponseEntity<>(all, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/getAllByUser")
-    public ResponseEntity<List<Like>> getAllByUser(@RequestBody User user){
-        List<Like> allByUser = likeService.getAllByUser(user);
+    @PostMapping(path = "/getAllByUser/{id}")
+    public ResponseEntity<List<Like>> getAllByUser(@PathVariable long id){
+        List<Like> allByUser = likeService.getAllByUser(id);
         return new ResponseEntity<>(allByUser, HttpStatus.OK);
     }
 

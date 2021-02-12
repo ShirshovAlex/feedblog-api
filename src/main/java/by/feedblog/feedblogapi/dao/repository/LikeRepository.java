@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
-//    List<Like> getAllByUser(User user);
+    List<Like> getAllByUser(User user);
 
 }
